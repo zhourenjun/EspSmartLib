@@ -10,7 +10,7 @@ object UdpBroadcastUtil {
 
     private val DATA = "Are You Espressif IOT Smart Device?"
     private val IOT_DEVICE_PORT = 1025
-    private val SO_TIMEOUT = 3000
+    private val SO_TIMEOUT = 6000
     private val RECEIVE_LEN = 64
     private val IOT_APP_PORT = 4025
     private var broadcastAddress: InetAddress? = null
@@ -58,11 +58,10 @@ object UdpBroadcastUtil {
         var hostname: String
         var responseAddr: InetAddress
         var responseBSSID: String
-        val realData: String
-        if (bssid != null) {
-            realData = DATA + " " + bssid
+        val realData: String = if (bssid != null) {
+            DATA + " " + bssid
         } else {
-            realData = DATA
+            DATA
         }
         try {
             // 分配端口
@@ -104,20 +103,15 @@ object UdpBroadcastUtil {
     }
 
     fun discoverIOTDevices(): List<IOTAddress> {
-        val result = discoverDevices(null)
-        if (result != null) {
-            return result
-        } else {
-            return emptyList()
-        }
+        return discoverDevices(null) ?: emptyList()
     }
 
-    fun filterBssid(data: String): String {
+    private fun filterBssid(data: String): String {
         val dataSplitArray = data.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         return dataSplitArray[1].split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
     }
 
-    fun filterIpAddress(data: String): String {
+    private fun filterIpAddress(data: String): String {
         val dataSplitArray = data.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         return dataSplitArray[dataSplitArray.size - 1]
     }
@@ -126,7 +120,7 @@ object UdpBroadcastUtil {
     private val DEVICE_PATTERN_BSSID = "([0-9a-fA-F]{2}:){5}([0-9a-fA-F]{2} )"
     private val DEVICE_PATTERN_IP = "(\\d+\\.){3}(\\d+)"
     private val DEVICE_PATTERN = DEVICE_PATTERN_TYPE + DEVICE_PATTERN_BSSID + DEVICE_PATTERN_IP
-    fun isValid(data: String): Boolean {
+    private fun isValid(data: String): Boolean {
         return data.matches(DEVICE_PATTERN.toRegex())
     }
 }
