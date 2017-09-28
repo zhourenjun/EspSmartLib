@@ -10,7 +10,7 @@ object UdpBroadcastUtil {
 
     private val DATA = "Are You Espressif IOT Smart Device?"
     private val IOT_DEVICE_PORT = 1025
-    private val SO_TIMEOUT = 6000
+    private val SO_TIMEOUT = 3000
     private val RECEIVE_LEN = 64
     private val IOT_APP_PORT = 4025
     private var broadcastAddress: InetAddress? = null
