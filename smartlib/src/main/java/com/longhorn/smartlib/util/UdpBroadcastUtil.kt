@@ -11,7 +11,6 @@ object UdpBroadcastUtil {
     private val DATA = "Are You Espressif IOT Smart Device?"
     private val IOT_DEVICE_PORT = 1025
     private val SO_TIMEOUT = 1000
-    private val MAX = 5
     private val RECEIVE_LEN = 1024
     private val IOT_APP_PORT = 4025
     private var broadcastAddress: InetAddress? = null
@@ -90,9 +89,9 @@ object UdpBroadcastUtil {
                 }
             } while (bSsid == null)
         } catch (e: SocketException) {
-            LogUtil.e(e)
+            LogUtil.w(e.message)
         } catch (e: IOException) {
-            LogUtil.e(e)
+            LogUtil.w(e.message)
         } finally {
             if (socket != null) {
                 socket.disconnect()
